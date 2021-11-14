@@ -1,0 +1,6 @@
+BUILD/
+mbed-os/
+resources/
+tests/
+.circleci/
+.mbed
