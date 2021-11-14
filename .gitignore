@@ -3,4 +3,4 @@ mbed-os/
 resources/
 tests/
 .circleci/
-.mbed
+mbed-os.lib
