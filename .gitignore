@@ -4,3 +4,4 @@ resources/
 tests/
 .circleci/
 mbed-os.lib
+*.key
