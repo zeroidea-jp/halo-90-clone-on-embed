@@ -12,7 +12,7 @@ DigitalOut led1(LED1);
 DigitalInOut pin1(ARDUINO_UNO_A0);
 DigitalInOut pin2(ARDUINO_UNO_A1);
 DigitalInOut pin3(ARDUINO_UNO_A2);
-
+DigitalInOut pin4(ARDUINO_UNO_A3);
 
 int main()
 {
@@ -28,6 +28,7 @@ int main()
         pin3.output();
         pin3 = 0;
         pin2.input();
+        pin4.input();
 
         thread_sleep_for(WAIT_TIME_MS);
         
@@ -36,6 +37,7 @@ int main()
         pin1.output();
         pin1 = 0;
         pin2.input();
+        pin4.input();        
 
         thread_sleep_for(WAIT_TIME_MS);
 
@@ -44,6 +46,7 @@ int main()
         pin2.output();
         pin2 = 0;
         pin1.input(); 
+        pin4.input();            
 
         thread_sleep_for(WAIT_TIME_MS);
         
@@ -52,6 +55,7 @@ int main()
         pin3.output();
         pin3 = 0;
         pin1.input();
+        pin4.input();        
 
         thread_sleep_for(WAIT_TIME_MS);   
 
@@ -60,6 +64,7 @@ int main()
         pin1.output();
         pin1 = 0;
         pin3.input();
+        pin4.input();        
 
         thread_sleep_for(WAIT_TIME_MS);
         
@@ -68,6 +73,25 @@ int main()
         pin2.output();
         pin2 = 0;
         pin3.input();
+        pin4.input();        
+        
+        thread_sleep_for(WAIT_TIME_MS);
+
+        pin1.output();
+        pin1 = 1;
+        pin4.output();
+        pin4 = 0;
+        pin3.input();
+        pin2.input();  
+
+        thread_sleep_for(WAIT_TIME_MS);
+
+        pin4.output();
+        pin4 = 1;
+        pin1.output();
+        pin1 = 0;
+        pin3.input();
+        pin2.input();        
         
         thread_sleep_for(WAIT_TIME_MS);
     }
