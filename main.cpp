@@ -24,15 +24,20 @@ volatile uint8_t patternNum = 0;
 // Values & Functions for Test Environment
 void ledHighTest2(uint8_t led);
 void ledLowTest2(uint8_t led);
+/* mbed Microcontroller Library
+ * Copyright (c) 2019 ARM Limited
+ * SPDX-License-Identifier: Apache-2.0
+ */
 
-// void led_pattern_handler(uint8_t patternNum);
-uint8_t led = 0;
-uint8_t rowMax = 5 ;
-uint8_t colMax = rowMax -1;
-uint8_t lMax = colMax * rowMax;
+#include "DigitalInOut.h"
+#include "mbed.h"
 
+#define WAIT_TIME_MS 1000
 
-DigitalOut led1(LED1);
+…volatile uint8_t patternNum = 0;
+//volatile uint8_t sleep = 0;
+
+// Values & Functions for Test Environment
 
 DigitalInOut pin0(ARDUINO_UNO_A0);
 DigitalInOut pin1(ARDUINO_UNO_A1);
