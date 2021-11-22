@@ -17,7 +17,7 @@ void ledLow(uint8_t led);
 volatile uint8_t prevLed = 0; // originally 0, in halo-90.c
 //int8_t rotationCenter = 45;
 //int8_t rotDir = 1;
-volatile uint8_t patternNum = 1;
+volatile uint8_t patternNum = 2;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
@@ -26,7 +26,7 @@ uint8_t colMax = 5;
 uint8_t rowMax = colMax - 1;
 uint8_t lMax = colMax * rowMax;
 
-// #define WAIT_TIME_MS 200
+#define WAIT_TIME_MS 20
 
 DigitalInOut pin0(ARDUINO_UNO_A0);
 DigitalInOut pin1(ARDUINO_UNO_A1);
@@ -57,7 +57,7 @@ int main()
         //     thread_sleep_for(WAIT_TIME_MS);
         // }
         led_pattern_handler(patternNum);
-
+        // thread_sleep_for(WAIT_TIME_MS); // use when led_pattern = 2 (Sparkle)
     }
 }
 
@@ -85,7 +85,7 @@ void setLed(uint8_t led){
 }
 
 void ledHigh(uint8_t led){
-    printf("LedHigh Setting... at LED = %d)\n", led);
+    // printf("LedHigh Setting... at LED = %d)\n", led);
 
     uint8_t col = led / rowMax;
     uint8_t topElements = rowMax - col;
@@ -93,7 +93,7 @@ void ledHigh(uint8_t led){
     if (topElements <= (rowMax - row)) {
         row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
     }
-    printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
+    // printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
 
     (*p_pN[col]).output();
     *p_pN[col] = 1; 
@@ -102,14 +102,14 @@ void ledHigh(uint8_t led){
 }
 
 void ledLow(uint8_t led){
-    printf("LedHigh Setting... at LED = %d)\n", led);
+    // printf("LedHigh Setting... at LED = %d)\n", led);
     uint8_t col = led / rowMax;
     uint8_t topElements = rowMax - col;
     uint8_t row = rowMax - (led % rowMax); // to fit the LED number defined on the halo-90.kicad_sch
     if (topElements <= (rowMax - row)) {
         row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
     }
-    printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
+    // printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
 
     (*p_pN[col]).input();
     (*p_pN[row]).input();      
