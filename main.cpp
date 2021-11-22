@@ -6,7 +6,6 @@
 #include "DigitalInOut.h"
 #include "mbed.h"
 
-#define WAIT_TIME_MS 1000
 
 // Prototypes
 //uint16_t readMic();
@@ -28,13 +27,12 @@ void ledLowTest2(uint8_t led);
  * Copyright (c) 2019 ARM Limited
  * SPDX-License-Identifier: Apache-2.0
  */
-
-#include "DigitalInOut.h"
-#include "mbed.h"
+ uint8_t colMax = 5;
+ uint8_t rowMax = colMax -1;
+ uint8_t lMax = colMax * rowMax;
 
 #define WAIT_TIME_MS 1000
 
-…volatile uint8_t patternNum = 0;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
@@ -53,7 +51,7 @@ DigitalInOut* p_pN[] = {
     &pin3,
     &pin4,
     &pin5
-};
+}; 
 
 
 // DigitalInOut* p_ph = &pinHigh;
@@ -71,7 +69,6 @@ int main()
  
     while (true)
     {
-        led1 = !led1;
         
         uint8_t led;
         for(led = 0; led < lMax; led ++){
@@ -109,10 +106,10 @@ void setLed(uint8_t led){
 void ledHighTest2(uint8_t led){
     printf("LedHigh Setting... at LED = %d)\n", led);
 
-    uint8_t col = led / colMax;
-    uint8_t topElements = colMax - col;
-    uint8_t row = colMax - (led % colMax); // to fit the LED number defined on the halo-90.kicad_sch
-    if (topElements <= (colMax - row)) {
+    uint8_t col = led / rowMax;
+    uint8_t topElements = rowMax - col;
+    uint8_t row = rowMax - (led % rowMax); // to fit the LED number defined on the halo-90.kicad_sch
+    if (topElements <= (rowMax - row)) {
         row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
     }
     printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
@@ -125,10 +122,10 @@ void ledHighTest2(uint8_t led){
 
 void ledLowTest2(uint8_t led){
     printf("LedHigh Setting... at LED = %d)\n", led);
-    uint8_t col = led / colMax;
-    uint8_t topElements = colMax - col;
-    uint8_t row = colMax - (led % colMax); // to fit the LED number defined on the halo-90.kicad_sch
-    if (topElements <= (colMax - row)) {
+    uint8_t col = led / rowMax;
+    uint8_t topElements = rowMax - col;
+    uint8_t row = rowMax - (led % rowMax); // to fit the LED number defined on the halo-90.kicad_sch
+    if (topElements <= (rowMax - row)) {
         row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
     }
     printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
