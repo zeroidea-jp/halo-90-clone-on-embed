@@ -17,12 +17,10 @@ void ledLow(uint8_t led);
 volatile uint8_t prevLed = 1; // originally 0, in halo-90.c
 //int8_t rotationCenter = 45;
 //int8_t rotDir = 1;
-volatile uint8_t patternNum = 0;
+volatile uint8_t patternNum = 1;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
-void ledHighTest2(uint8_t led);
-void ledLowTest2(uint8_t led);
 /* mbed Microcontroller Library
  * Copyright (c) 2019 ARM Limited
  * SPDX-License-Identifier: Apache-2.0
@@ -42,15 +40,14 @@ DigitalInOut pin1(ARDUINO_UNO_A1);
 DigitalInOut pin2(ARDUINO_UNO_A2);
 DigitalInOut pin3(ARDUINO_UNO_A3);
 DigitalInOut pin4(ARDUINO_UNO_A4);
-DigitalInOut pin5(ARDUINO_UNO_A5);
+// DigitalInOut pin5(ARDUINO_UNO_A5);
 
 DigitalInOut* p_pN[] = {
     &pin0,
     &pin1,
     &pin2,
     &pin3,
-    &pin4,
-    &pin5
+    &pin4
 }; 
 
 
@@ -98,12 +95,12 @@ void led_pattern_handler(uint8_t patternNum) {
 }
 
 void setLed(uint8_t led){
-  ledLowTest2(prevLed);
-  ledHighTest2(led);
+  ledLow(prevLed);
+  ledHigh(led);
   prevLed = led;
 }
 
-void ledHighTest2(uint8_t led){
+void ledHigh(uint8_t led){
     printf("LedHigh Setting... at LED = %d)\n", led);
 
     uint8_t col = led / rowMax;
@@ -120,7 +117,7 @@ void ledHighTest2(uint8_t led){
     *p_pN[row] = 0;        
 }
 
-void ledLowTest2(uint8_t led){
+void ledLow(uint8_t led){
     printf("LedHigh Setting... at LED = %d)\n", led);
     uint8_t col = led / rowMax;
     uint8_t topElements = rowMax - col;
@@ -135,43 +132,3 @@ void ledLowTest2(uint8_t led){
 
 }
 
-
-// Enable a specific LED
-void ledHigh(uint8_t led) {
-//   uint8_t col = led / colMax;
-//   uint8_t topElements = colMax - col;
-//   uint8_t row = colMax - (led % colMax);
-//   if (topElements <= (colMax - row)) {
-//     row--;
-//   }
-
-  // Set column HIGH
-
-//  CPX_PORT[col]->DDR.byte |= CPX_PIN[col];
-//  CPX_PORT[col]->CR1.byte |= CPX_PIN[col];
-//  CPX_PORT[col]->ODR.byte |= CPX_PIN[col];
-  // Set row LOW
-//  CPX_PORT[row]->DDR.byte |= CPX_PIN[row];
-//  CPX_PORT[row]->CR1.byte |= CPX_PIN[row];
-//  CPX_PORT[row]->ODR.byte &= ~CPX_PIN[row];
-}
-
-
-// Disable a specific LED
-void ledLow(uint8_t led) {
-//   uint8_t col = led / colMax;
-//   uint8_t topElements = colMax - col;
-//   uint8_t row = colMax - (led % colMax);
-//   if (topElements <= (colMax - row)) {
-//     row--;
-//   }
-
-  // Set row to HI-Z
-//  CPX_PORT[row]->ODR.byte |= CPX_PIN[row];
-//  CPX_PORT[row]->DDR.byte &= ~CPX_PIN[row];
-//  CPX_PORT[row]->CR1.byte &= ~CPX_PIN[row];
-  // Set column to HI-Z
-//  CPX_PORT[col]->ODR.byte &= ~CPX_PIN[col];
-//  CPX_PORT[col]->DDR.byte &= ~CPX_PIN[col];
-//  CPX_PORT[col]->CR1.byte &= ~CPX_PIN[col];
-}
