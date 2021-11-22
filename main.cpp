@@ -14,26 +14,19 @@ void ledHigh(uint8_t led);
 void ledLow(uint8_t led);
 
 // Global previousLed
-volatile uint8_t prevLed = 1; // originally 0, in halo-90.c
+volatile uint8_t prevLed = 0; // originally 0, in halo-90.c
 //int8_t rotationCenter = 45;
 //int8_t rotDir = 1;
 volatile uint8_t patternNum = 1;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
-/* mbed Microcontroller Library
- * Copyright (c) 2019 ARM Limited
- * SPDX-License-Identifier: Apache-2.0
- */
- uint8_t colMax = 5;
- uint8_t rowMax = colMax -1;
- uint8_t lMax = colMax * rowMax;
+void led_pattern_handler(uint8_t patternNum) ;
+uint8_t colMax = 5;
+uint8_t rowMax = colMax - 1;
+uint8_t lMax = colMax * rowMax;
 
-#define WAIT_TIME_MS 1000
-
-//volatile uint8_t sleep = 0;
-
-// Values & Functions for Test Environment
+// #define WAIT_TIME_MS 200
 
 DigitalInOut pin0(ARDUINO_UNO_A0);
 DigitalInOut pin1(ARDUINO_UNO_A1);
@@ -50,29 +43,20 @@ DigitalInOut* p_pN[] = {
     &pin4
 }; 
 
-
-// DigitalInOut* p_ph = &pinHigh;
-// DigitalInOut* p_pl = &pinLow;
-
 int main()
 {
-    // printf("print pointer of object1: %d\n", p_pN[0]);
-    // printf("print pointer of object2: %d\n", p_pN[1]);
-    // printf("print pointer of object3: %d\n", p_pN[2]);
-    // printf("print pointer of object3: %d\n", p_pN[3]);
-    // printf("print pointer of object4: %d\n", p_pN[4]);
 
     printf("This is the bare metal charlieplexing example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
  
     while (true)
     {
         
-        uint8_t led;
-        for(led = 0; led < lMax; led ++){
-            setLed(led);
-            thread_sleep_for(WAIT_TIME_MS);
-        }
-        //led_pattern_handler(patternNum);
+        // uint8_t led;
+        // for(led = 0; led < lMax; led ++){
+        //     setLed(led);
+        //     thread_sleep_for(WAIT_TIME_MS);
+        // }
+        led_pattern_handler(patternNum);
 
     }
 }
@@ -81,12 +65,12 @@ void led_pattern_handler(uint8_t patternNum) {
     switch(patternNum){
     case 1:
       // Halo
-      setLed((prevLed + 13)%90);
+      setLed((prevLed + 13)%lMax); // 13 for 90 LEDs. c.f. 13x7 = 91.
     break;
 
     case 2:
       // Sparkle
-      rand()%15 ? ledLow(prevLed) : setLed(rand() % 90);
+      rand()%15 ? ledLow(prevLed) : setLed(rand() % lMax);
     break;
 
     default:
