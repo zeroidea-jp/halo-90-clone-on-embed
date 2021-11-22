@@ -6,7 +6,7 @@
 #include "DigitalInOut.h"
 #include "mbed.h"
 
-#define WAIT_TIME_MS 200 
+#define WAIT_TIME_MS 1000
 
 // Prototypes
 //uint16_t readMic();
@@ -22,10 +22,14 @@ volatile uint8_t patternNum = 0;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
-void ledHighTest(uint8_t i, uint8_t j);
-void ledLowTest(uint8_t i, uint8_t j);
+void ledHighTest2(uint8_t led);
+void ledLowTest2(uint8_t led);
+
 // void led_pattern_handler(uint8_t patternNum);
-uint8_t colMax = 5 ;
+uint8_t led = 0;
+uint8_t rowMax = 5 ;
+uint8_t colMax = rowMax -1;
+uint8_t lMax = colMax * rowMax;
 
 
 DigitalOut led1(LED1);
@@ -63,25 +67,13 @@ int main()
     while (true)
     {
         led1 = !led1;
-
-        //
-        uint8_t i;
-        uint8_t j;
-        for(i = 0; i <= colMax - 1; i++){
-            printf("\n");
-            for(j = 0; j <= colMax; j++){
-                if( i != j ){
-                    printf("(i,j)= (%d,%d)\n", i,j);
-                    ledHighTest(i,j);
-                    thread_sleep_for(WAIT_TIME_MS);
-                    ledLowTest(i,j);
-                }
-            }
+        
+        uint8_t led;
+        for(led = 0; led < lMax; led ++){
+            setLed(led);
+            thread_sleep_for(WAIT_TIME_MS);
         }
-
         //led_pattern_handler(patternNum);
-
-        thread_sleep_for(WAIT_TIME_MS);
 
     }
 }
@@ -104,27 +96,44 @@ void led_pattern_handler(uint8_t patternNum) {
 }
 
 void setLed(uint8_t led){
-  ledLow(prevLed);
-  ledHigh(led);
+  ledLowTest2(prevLed);
+  ledHighTest2(led);
   prevLed = led;
 }
 
-void ledHighTest(uint8_t i, uint8_t j){
-    printf("LedHigh Setting... at (i,j) = (%d,%d)\n", i,j);
+void ledHighTest2(uint8_t led){
+    printf("LedHigh Setting... at LED = %d)\n", led);
 
-    (*p_pN[i]).output();
-    *p_pN[i] = 1; 
-    (*p_pN[j]).output();   
-    *p_pN[j] = 0;        
+    uint8_t col = led / colMax;
+    uint8_t topElements = colMax - col;
+    uint8_t row = colMax - (led % colMax); // to fit the LED number defined on the halo-90.kicad_sch
+    if (topElements <= (colMax - row)) {
+        row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
+    }
+    printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
+
+    (*p_pN[col]).output();
+    *p_pN[col] = 1; 
+    (*p_pN[row]).output();   
+    *p_pN[row] = 0;        
 }
 
-void ledLowTest(uint8_t i, uint8_t j){
-    printf("LedLow Setting... at (i,j) = (%d,%d)\n", i,j);
+void ledLowTest2(uint8_t led){
+    printf("LedHigh Setting... at LED = %d)\n", led);
+    uint8_t col = led / colMax;
+    uint8_t topElements = colMax - col;
+    uint8_t row = colMax - (led % colMax); // to fit the LED number defined on the halo-90.kicad_sch
+    if (topElements <= (colMax - row)) {
+        row--; // to shift the coordinate, where no LED exist (at row == col), to the next row
+    }
+    printf("Corresponding pins numbers are (row,col) = (%d,%d)\n", row,col);
 
-    (*p_pN[i]).input();
-    (*p_pN[j]).input();      
+    (*p_pN[col]).input();
+    (*p_pN[row]).input();      
 
 }
+
+
 // Enable a specific LED
 void ledHigh(uint8_t led) {
 //   uint8_t col = led / colMax;
