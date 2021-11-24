@@ -3,9 +3,8 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-#include "DigitalInOut.h"
+// #include "DigitalInOut.h"
 #include "mbed.h"
-
 
 // Prototypes
 //uint16_t readMic();
@@ -17,11 +16,12 @@ void ledLow(uint8_t led);
 volatile uint8_t prevLed = 0; // originally 0, in halo-90.c
 //int8_t rotationCenter = 45;
 //int8_t rotDir = 1;
-volatile uint8_t patternNum = 2;
+volatile uint8_t patternNum = 0;
 //volatile uint8_t sleep = 0;
 
 // Values & Functions for Test Environment
 void led_pattern_handler(uint8_t patternNum) ;
+void button_handler();
 uint8_t colMax = 5;
 uint8_t rowMax = colMax - 1;
 uint8_t lMax = colMax * rowMax;
@@ -43,34 +43,50 @@ DigitalInOut* p_pN[] = {
     &pin4
 }; 
 
+// DigitalOut led1(LED1);
+InterruptIn tactile0(BUTTON1);
+InterruptIn tactile1(ARDUINO_UNO_D0);
+// InterruptIn* tactile[]{
+//     &tactile0, 
+//     &tactile1
+// };
+
+
 int main()
 {
 
     printf("This is the bare metal charlieplexing example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
- 
+    tactile0.rise(&button_handler);
+    tactile1.rise(&button_handler);
     while (true)
     {
-        
+        // led1 = tactile0;
         // uint8_t led;
         // for(led = 0; led < lMax; led ++){
         //     setLed(led);
         //     thread_sleep_for(WAIT_TIME_MS);
         // }
         led_pattern_handler(patternNum);
-        // thread_sleep_for(WAIT_TIME_MS); // use when led_pattern = 2 (Sparkle)
+
     }
+}
+
+
+void button_handler(){
+    patternNum = (patternNum + 1 )%2;
 }
 
 void led_pattern_handler(uint8_t patternNum) {
     switch(patternNum){
-    case 1:
+    case 0:
       // Halo
-      setLed((prevLed + 13)%lMax); // 13 for 90 LEDs. c.f. 13x7 = 91.
+        setLed((prevLed + 13)%lMax); // 13 for 90 LEDs. c.f. 13x7 = 91.
     break;
 
-    case 2:
+    case 1:
       // Sparkle
-      rand()%15 ? ledLow(prevLed) : setLed(rand() % lMax);
+        rand()%15 ? ledLow(prevLed) : setLed(rand() % lMax);
+        thread_sleep_for(WAIT_TIME_MS); // use when led_pattern = 2 (Sparkle)
     break;
 
     default:
