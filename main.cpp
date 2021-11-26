@@ -44,8 +44,8 @@ DigitalInOut* p_pN[] = {
 }; 
 
 // DigitalOut led1(LED1);
-InterruptIn tactile0(BUTTON1);
-InterruptIn tactile1(ARDUINO_UNO_D0);
+// InterruptIn tactile0(BUTTON1);
+InterruptIn tactile1(ARDUINO_UNO_D2, PullUp);
 // InterruptIn* tactile[]{
 //     &tactile0, 
 //     &tactile1
@@ -56,8 +56,8 @@ int main()
 {
 
     printf("This is the bare metal charlieplexing example running on Mbed OS %d.%d.%d.\n", MBED_MAJOR_VERSION, MBED_MINOR_VERSION, MBED_PATCH_VERSION);
-    tactile0.rise(&button_handler);
-    tactile1.rise(&button_handler);
+    // tactile0.rise(&button_handler);
+    tactile1.fall(&button_handler);
     while (true)
     {
         // led1 = tactile0;
